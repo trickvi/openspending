@@ -85,8 +85,6 @@ class BaseImporter(object):
 
         self.validate_model()
         self.dataset = self.create_dataset(dry_run=dry_run)
-        self.dataset.generate()
-        #self.describe_dimensions()
 
         self.line_number = 0
 
@@ -129,10 +127,8 @@ class BaseImporter(object):
         if dataset is not None:
             return dataset
         dataset = Dataset(self.model)
-        # TODO: only persist for non-dry-run?
-        if not dry_run:
-            db.session.add(dataset)
-            db.session.commit()
+        db.session.add(dataset)
+        db.session.commit()
         return dataset
 
     def process_line(self, line):
