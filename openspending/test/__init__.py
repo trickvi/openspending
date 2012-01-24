@@ -45,8 +45,10 @@ class TestCase(object):
 class DatabaseTestCase(TestCase):
 
     def setup(self):
+        from openspending.command import db as db_cmd
         setup_package()
-        meta.metadata.create_all(meta.engine)
+        r = db_cmd.init()
+        assert r == 0            
 
     def teardown(self):
         clean_db()

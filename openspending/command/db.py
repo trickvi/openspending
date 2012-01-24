@@ -4,10 +4,11 @@ import json
 
 from pylons import config
 
-from openspending.model import Dataset, meta as db
+from openspending.model import init_model, Dataset, meta as db
 from openspending.test.helpers import load_fixture
 
 import migrate.versioning.api as migrate_api
+from migrate.versioning.util import construct_engine
 from migrate.exceptions import DatabaseNotControlledError, \
         DatabaseAlreadyControlledError
 
@@ -46,17 +47,19 @@ def migrate():
                       os.path.join(os.path.dirname(config['__file__']),
                                    'migration'))
 
+    init_model(construct_engine(url))
+
     try:
-        migrate_api.upgrade(url, repo)
+        migrate_api.upgrade(db.engine, repo)
     except DatabaseNotControlledError:
         # Assume it's a new database, and try the migration again
-        migrate_api.version_control(url, repo)
-        migrate_api.upgrade(url, repo)
+        migrate_api.version_control(db.engine, repo)
+        migrate_api.upgrade(db.engine, repo)
 
-    diff = migrate_api.compare_model_to_db(url, repo, db.metadata)
+    diff = migrate_api.compare_model_to_db(db.engine, repo, db.metadata)
     if diff:
         # Oh dear! The database we migrated to doesn't match openspending.model
-        print diff
+        log.warn(diff)
         return 1
 
     return 0
@@ -80,7 +83,7 @@ def modelmigrate():
     return 0
 
 def init():
-    migrate()
+    return migrate()
 
 def _init(args):
     return init()

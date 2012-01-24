@@ -1,9 +1,8 @@
 from sqlalchemy import *
 from migrate import *
 
-meta = MetaData()
-
 def upgrade(migrate_engine):
+    meta = MetaData()
     meta.bind = migrate_engine
     dataset = Table('dataset', meta, autoload=True)
 
