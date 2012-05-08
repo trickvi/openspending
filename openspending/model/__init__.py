@@ -13,6 +13,7 @@ from openspending.model.source import Source
 from openspending.model.run import Run
 from openspending.model.log_record import LogRecord
 from openspending.model.view import View
+from openspending.model.cuboid import Cuboid
 
 # shut up useless SA warning:
 import warnings
