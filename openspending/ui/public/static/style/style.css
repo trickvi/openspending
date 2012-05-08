@@ -283,9 +283,9 @@ footer a.twitter {
 }
 
 #fp-map svg path.bg {
-	stroke: #d3d0d0;
-	fill: #d3d0d0;
-	opacity: 0.5;
+	stroke: #eee; /*d3d0d0;*/
+	fill: #fff;
+	opacity: 0.9;
 }
 
 
